@@ -20,6 +20,7 @@
     "@types/styled-components": "^5.1.26",
     "@types/styled-system": "^5.1.15",
     "date-fns": "^2.29.3",
+    "debounce": "^1.2.1",
     "modern-normalize": "^1.1.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -55,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/debounce": "^1.2.1"
   }
 }

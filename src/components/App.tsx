@@ -1,10 +1,9 @@
 import { GlobalStyle } from './GlobalStyle';
 import { Routes, Route } from 'react-router-dom';
-import React, { lazy } from 'react';
-
-const Home = lazy(() => import('../pages/Home/Home'));
-const Article = lazy(() => import('../pages/Article/Article'));
-const Error = lazy(() => import('../pages/Error/Error'));
+import React from 'react';
+import Home from '../pages/Home/Home';
+import Article from '../pages/Article/Article';
+import Error from '../pages/Error/Error';
 
 export const App: React.FC = () => {
   return (

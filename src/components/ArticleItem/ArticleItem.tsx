@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Typography,
   Grid,
@@ -9,11 +9,11 @@ import {
   CardActions,
   CardMedia,
 } from '@mui/material';
-import EastIcon from '@mui/icons-material/East';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import { ReactComponent as ArrowIcon } from '../../images/arrow.svg';
+import { ReactComponent as CalendarIcon } from '../../images/calendar.svg';
 import { format } from 'date-fns';
 import { IArticle } from '../../types/article';
-import { PickedWord } from './ArticleItem.styled';
+import { Link, useLocation } from 'react-router-dom';
 
 type IProps = {
   article: IArticle;
@@ -24,12 +24,31 @@ export const ArticleItem: React.FC<IProps> = ({
   article: { id, imageUrl, title, publishedAt, summary },
   filter,
 }) => {
+  const location = useLocation();
+
   const returnShortDescription = (text: string) => {
     return text.length <= 100 ? text : `${text.slice(0, 100)}...`;
   };
 
   const pickKeyWords = (text: string): any => {
-    return text.split(filter);
+    if (filter === '') return text;
+    const regexp = new RegExp(filter, 'ig');
+    const matchValue = text.match(regexp);
+    if (matchValue) {
+      return text.split(regexp).map((itm, idx, arr) => {
+        if (idx < arr.length - 1) {
+          const pick = matchValue.shift();
+          return (
+            <Fragment key={`${itm}-${idx}`}>
+              {itm}
+              <span style={{ backgroundColor: 'yellow' }}>{pick}</span>
+            </Fragment>
+          );
+        }
+        return <Fragment key={`${itm}-${idx}`}>{itm}</Fragment>;
+      });
+    }
+    return text;
   };
 
   return (
@@ -40,7 +59,8 @@ export const ArticleItem: React.FC<IProps> = ({
           flexDirection: 'column',
           flexGrow: 1,
           border: 1,
-          borderRadius: 2,
+          boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.05)',
+          borderRadius: '5px',
           borderColor: '#EAEAEA',
         }}
       >
@@ -57,19 +77,19 @@ export const ArticleItem: React.FC<IProps> = ({
             }}
           >
             <Stack gap={25} mb={20}>
-              <Stack direction="row" alignItems="center" spacing={8}>
-                <CalendarTodayOutlinedIcon
-                  sx={{ color: '#363636', fontSize: 14 }}
-                />
-                <Typography variant="subtitle1">
+              <Stack direction="row" alignItems="stratch" spacing={8}>
+                <CalendarIcon />
+                <Typography component="span" variant="subtitle1">
                   {format(new Date(publishedAt), 'MMMM do, y')}
                 </Typography>
               </Stack>
-              <Typography variant="h2">{title}</Typography>
+              <Typography component="h2" variant="h2">
+                {pickKeyWords(title)}
+              </Typography>
             </Stack>
 
-            <Typography variant="body1">
-              {returnShortDescription(summary)}
+            <Typography component="p" variant="body1">
+              {pickKeyWords(returnShortDescription(summary))}
             </Typography>
           </CardContent>
           <CardActions
@@ -79,9 +99,18 @@ export const ArticleItem: React.FC<IProps> = ({
           >
             <Button
               variant="text"
-              sx={{ color: '#363636', p: 0, fontWeight: 700 }}
+              component={Link}
+              to={`/${id}`}
+              state={{ from: location }}
+              sx={{
+                color: '#363636',
+                p: 0,
+                fontWeight: 700,
+                gap: 6,
+                textTransform: 'none',
+              }}
             >
-              Read more <EastIcon />
+              Read more <ArrowIcon />
             </Button>
           </CardActions>
         </Stack>

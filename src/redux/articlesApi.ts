@@ -18,11 +18,16 @@ export const articlesApi = createApi({
       query: id => `/v3/articles/${id}`,
       providesTags: ['Article'],
     }),
+    getArticlesCount: builder.query<number, string>({
+      query: keyword =>
+        `/v3/articles/count?_where[_or][0][title_contains]=${keyword}&_where[_or][1][summary_contains]=${keyword}`,
+      providesTags: ['Article'],
+    }),
   }),
 });
 
-export const { useGetArticlesQuery, useGetArticleByIdQuery } = articlesApi;
-
-// YGnmWkIdViAk7Q140A-PEZvYxG4-er6E3K_WSzh_V5Q
-
-//  _where[_or][0][title_contains]=${keyword}&_where[_or][1][summary_contains]=${keyword}
+export const {
+  useGetArticlesQuery,
+  useGetArticleByIdQuery,
+  useGetArticlesCountQuery,
+} = articlesApi;
