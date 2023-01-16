@@ -13,7 +13,6 @@ export const useInfiniteScroll = (summaryPages: number) => {
       const [target] = entries;
       if (target.isIntersecting && summaryPages > downloadedPages) {
         dispatch(setPage(downloadedPages));
-        return;
       }
     },
     [summaryPages, downloadedPages, dispatch]
@@ -29,6 +28,9 @@ export const useInfiniteScroll = (summaryPages: number) => {
     const observer = new IntersectionObserver(handleObserver, option);
 
     if (loadMoreRef.current) observer.observe(loadMoreRef.current);
+    return () => {
+      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
+    };
   }, [handleObserver]);
 
   return { loadMoreRef };

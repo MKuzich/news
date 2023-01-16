@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, CircularProgress, Box } from '@mui/material';
 import { useGetArticlesQuery } from '../../redux/articlesApi';
 import { ArticleItem } from '../ArticleItem/ArticleItem';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
@@ -27,7 +27,20 @@ export const ArticlesList: React.FC<IProps> = ({ filter, summaryPages }) => {
           <ArticleItem key={article.title} article={article} filter={filter} />
         ))}
       </Grid>
-      {!isFetching && <div ref={loadMoreRef}></div>}
+      {isFetching && (
+        <Box
+          sx={{
+            height: 200,
+            display: 'flex',
+            justifyContent: 'center',
+            alighnItems: 'center',
+            m: 60,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
+      <div ref={loadMoreRef}></div>
     </>
   );
 };
