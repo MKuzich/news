@@ -9,14 +9,17 @@ import {
   Divider,
 } from '@mui/material';
 import { ReactComponent as SearchIcon } from '../../images/search.svg';
-import { useGetArticlesCountQuery } from '../../redux/articlesApi';
+import { useGetArticlesCountQuery, articlesApi } from '../../redux/articlesApi';
 import { ArticlesList } from '../../components/ArticlesList/ArticlesList';
 import { useSearchParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setPage } from '../../redux/searchSlice';
 
 const Home: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const filter = searchParams.get('filter') ?? '';
   const { data } = useGetArticlesCountQuery(filter);
+  const dispatch = useDispatch();
 
   const onInputChangeFilter = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -25,6 +28,8 @@ const Home: React.FC = () => {
     const nextParams: { filter?: string } =
       inputValue !== '' ? { filter: inputValue } : {};
     setSearchParams(nextParams);
+    dispatch(articlesApi.util.resetApiState());
+    dispatch(setPage(0));
   };
   return (
     <section>
@@ -68,7 +73,7 @@ const Home: React.FC = () => {
             data ?? 0
           }`}</Typography>
           <Divider sx={{ mb: 45 }} />
-          <ArticlesList filter={filter} />
+          <ArticlesList filter={filter} summaryPages={data ?? 0} />
         </Box>
       </Container>
     </section>

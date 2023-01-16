@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { articlesApi } from './articlesApi';
+import searchReducer from './searchSlice';
 
 export const store = configureStore({
   reducer: {
     [articlesApi.reducerPath]: articlesApi.reducer,
+    search: searchReducer,
   },
   middleware: getDefaultMiddleware => [
     ...getDefaultMiddleware(),
