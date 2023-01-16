@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Grid, CircularProgress, Box } from '@mui/material';
 import { useGetArticlesQuery } from '../../redux/articlesApi';
 import { ArticleItem } from '../ArticleItem/ArticleItem';
@@ -15,10 +15,6 @@ export const ArticlesList: React.FC<IProps> = ({ filter, summaryPages }) => {
   const page: number = useSelector(selectPage);
   const { loadMoreRef } = useInfiniteScroll(summaryPages);
   const { data, isFetching } = useGetArticlesQuery({ filter, page });
-
-  useEffect(() => {
-    console.log('page changes: ', page);
-  }, [page]);
 
   return (
     <>
