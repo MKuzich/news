@@ -6,7 +6,7 @@ export const useInfiniteScroll = (summaryPages: number) => {
   const page = useSelector(selectPage);
   const dispatch = useDispatch();
   const loadMoreRef = useRef(null);
-  const downloadedPages = page + 6;
+  const downloadedPages = page + 12;
 
   const handleObserver = useCallback(
     (entries: Array<any>) => {
