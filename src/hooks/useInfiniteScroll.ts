@@ -26,10 +26,11 @@ export const useInfiniteScroll = (summaryPages: number) => {
     };
 
     const observer = new IntersectionObserver(handleObserver, option);
+    const node = loadMoreRef.current;
 
-    if (loadMoreRef.current) observer.observe(loadMoreRef.current);
+    if (node) observer.observe(node);
     return () => {
-      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
+      if (node) observer.unobserve(node);
     };
   }, [handleObserver]);
 
