@@ -33,9 +33,9 @@ export const Filter: React.FC = () => {
     const nextParams: { filter?: string } =
       normalizedValue === '' ? {} : { filter: normalizedValue };
 
-    setSearchParams(nextParams);
     dispatch(articlesApi.util.resetApiState());
     dispatch(setPage(0));
+    setSearchParams(nextParams);
   };
 
   return (

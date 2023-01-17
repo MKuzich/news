@@ -16,6 +16,7 @@ export const articlesApi = createApi({
         `/v3/articles?${createQueryString(filter)}&_limit=12&_start=${page}`,
       providesTags: ['Article'],
       transformResponse: (response: Articles, _meta, args) => {
+        if (args.filter === '') return response;
         const firstArray: Articles = [];
         const secondArray: Articles = [];
         response.forEach(page => {

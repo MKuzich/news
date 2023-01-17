@@ -1,5 +1,6 @@
-export const createQueryString = (filter: string): string =>
-  filter
+export const createQueryString = (filter: string): string => {
+  if (filter === '') return '';
+  return filter
     .split(' ')
     .map(
       (itm, idx) =>
@@ -8,3 +9,4 @@ export const createQueryString = (filter: string): string =>
         }][summary_contains]=${itm}`
     )
     .join('&');
+};
