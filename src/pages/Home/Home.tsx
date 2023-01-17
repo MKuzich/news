@@ -24,7 +24,7 @@ const Home: React.FC = () => {
   const onInputChangeFilter = (
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    const inputValue = e.target.value.trim();
+    const inputValue = e.target.value;
     const nextParams: { filter?: string } =
       inputValue !== '' ? { filter: inputValue } : {};
     setSearchParams(nextParams);

@@ -31,8 +31,8 @@ export const ArticleItem: React.FC<IProps> = ({
   };
 
   const pickKeyWords = (text: string): any => {
-    if (filter === '') return text;
-    const regexp = new RegExp(filter, 'ig');
+    if (filter.trim() === '') return text;
+    const regexp = new RegExp(filter.split(' ').join('|'), 'ig');
     const matchValue = text.match(regexp);
     if (matchValue) {
       return text.split(regexp).map((itm, idx, arr) => {

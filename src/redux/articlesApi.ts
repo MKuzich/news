@@ -12,13 +12,26 @@ export const articlesApi = createApi({
   endpoints: builder => ({
     getArticles: builder.query<Articles, IQuery>({
       query: ({ filter, page }) =>
-        `/v3/articles?_where[_or][0][title_contains]=${filter}&_where[_or][1][summary_contains]=${filter}&_limit=12&_start=${page}`,
+        `/v3/articles?${filter
+          .split(' ')
+          .map(
+            (itm, idx) =>
+              `_where[_or][${idx * 2}][title_contains]=${itm}&_where[_or][${
+                idx * 2 + 1
+              }][summary_contains]=${itm}&`
+          )
+          .join('')}_limit=12&_start=${page}`,
       providesTags: ['Article'],
       transformResponse: (response: Articles, _meta, args) => {
         const firstArray: Articles = [];
         const secondArray: Articles = [];
         response.forEach(page => {
-          if (page.title.toLowerCase().includes(args.filter.toLowerCase())) {
+          if (
+            args.filter
+              .toLowerCase()
+              .split(' ')
+              .some(word => page.title.toLowerCase().includes(word))
+          ) {
             firstArray.push(page);
           } else {
             secondArray.push(page);
@@ -42,7 +55,15 @@ export const articlesApi = createApi({
     }),
     getArticlesCount: builder.query<number, string>({
       query: filter =>
-        `/v3/articles/count?_where[_or][0][title_contains]=${filter}&_where[_or][1][summary_contains]=${filter}`,
+        `/v3/articles/count?${filter
+          .split(' ')
+          .map(
+            (itm, idx) =>
+              `_where[_or][${idx * 2}][title_contains]=${itm}&_where[_or][${
+                idx * 2 + 1
+              }][summary_contains]=${itm}&`
+          )
+          .join('')}`,
       providesTags: ['Article'],
     }),
   }),
