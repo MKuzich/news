@@ -1,41 +1,31 @@
 import React from 'react';
-import { Grid, CircularProgress, Box } from '@mui/material';
+import { Grid } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+
+import { selectPage } from '../../redux/searchSlice';
 import { useGetArticlesQuery } from '../../redux/articlesApi';
+
 import { ArticleItem } from '../ArticleItem/ArticleItem';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
-import { useSelector } from 'react-redux';
-import { selectPage } from '../../redux/searchSlice';
+import { Loader } from '../Loader/Loader';
 
-type IProps = {
-  filter: string;
-  summaryPages: number;
-};
-
-export const ArticlesList: React.FC<IProps> = ({ filter, summaryPages }) => {
+export const ArticlesList: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const filter = searchParams.get('filter') ?? '';
   const page: number = useSelector(selectPage);
-  const { loadMoreRef } = useInfiniteScroll(summaryPages);
-  const { data, isFetching } = useGetArticlesQuery({ filter, page });
+  const { loadMoreRef } = useInfiniteScroll();
+  const { data, isFetching, isSuccess } = useGetArticlesQuery({ filter, page });
 
   return (
     <>
       <Grid container spacing={45}>
-        {data?.map(article => (
-          <ArticleItem key={article.title} article={article} filter={filter} />
-        ))}
+        {isSuccess &&
+          data.map(article => (
+            <ArticleItem key={article.title} article={article} />
+          ))}
       </Grid>
-      {isFetching && (
-        <Box
-          sx={{
-            height: 200,
-            display: 'flex',
-            justifyContent: 'center',
-            alighnItems: 'center',
-            m: 60,
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      )}
+      {isFetching && <Loader />}
       <div ref={loadMoreRef}></div>
     </>
   );

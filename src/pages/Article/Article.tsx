@@ -1,15 +1,17 @@
 import React from 'react';
-import { useLocation, Link, useParams } from 'react-router-dom';
-import { Container, Button, Paper, Typography } from '@mui/material';
+import { useLocation, useParams } from 'react-router-dom';
+import { Container, Paper, Typography } from '@mui/material';
 import { ReactComponent as BackArrowIcon } from '../../images/back-arrow.svg';
 import { useGetArticleByIdQuery } from '../../redux/articlesApi';
 import { BackgroundHeader } from './Article.styled';
+import { ButtonLink } from '../../components/ButtonLink/ButtonLink';
+import { Loader } from '../../components/Loader/Loader';
 
 const Article: React.FC = () => {
   const location = useLocation();
-  const backLink = location.state.from;
+  const backLink = location.state?.from ?? '/';
   const { articleId } = useParams();
-  const { data } = useGetArticleByIdQuery(articleId!);
+  const { data, isFetching, isSuccess } = useGetArticleByIdQuery(articleId!);
   return (
     <section>
       <Container
@@ -35,30 +37,29 @@ const Article: React.FC = () => {
               borderRadius: '5px',
             }}
           >
-            <Typography component="h1" variant="h2" textAlign="center" mb={50}>
-              {data?.title}
-            </Typography>
-            <Typography component="p" variant="body2">
-              {data?.summary}
-            </Typography>
+            {isFetching && <Loader />}
+            {isSuccess && (
+              <>
+                <Typography
+                  component="h1"
+                  variant="h2"
+                  textAlign="center"
+                  mb={50}
+                >
+                  {data.title}
+                </Typography>
+                <Typography component="p" variant="body2">
+                  {data.summary}
+                </Typography>
+              </>
+            )}
           </Paper>
-          <Button
-            variant="text"
-            component={Link}
-            to={backLink}
-            sx={{
-              color: '#363636',
-              p: 0,
-              fontWeight: 700,
-              gap: 6,
-              textTransform: 'none',
-            }}
-          >
+          <ButtonLink link={backLink} style={{ marginLeft: 75 }}>
             <BackArrowIcon />
             Back to homepage
-          </Button>
+          </ButtonLink>
         </div>
-        <BackgroundHeader imageUrl={data?.imageUrl} />
+        {isSuccess && <BackgroundHeader imageUrl={data.imageUrl} />}
       </Container>
     </section>
   );

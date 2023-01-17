@@ -1,8 +1,15 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPage, setPage } from '../redux/searchSlice';
+import { useSearchParams } from 'react-router-dom';
 
-export const useInfiniteScroll = (summaryPages: number) => {
+import { selectPage, setPage } from '../redux/searchSlice';
+import { useGetArticlesCountQuery } from '../redux/articlesApi';
+
+export const useInfiniteScroll = () => {
+  const [searchParams] = useSearchParams();
+  const filter = searchParams.get('filter') ?? '';
+  const { data } = useGetArticlesCountQuery(filter);
+  const summaryPages = data ?? 0;
   const page = useSelector(selectPage);
   const dispatch = useDispatch();
   const loadMoreRef = useRef(null);
