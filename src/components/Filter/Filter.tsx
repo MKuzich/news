@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import debounce from 'lodash.debounce';
 
 import { articlesApi } from '../../redux/articlesApi';
 import { setPage } from '../../redux/searchSlice';
@@ -46,7 +45,7 @@ export const Filter: React.FC = () => {
         </Typography>
       </InputLabel>
       <TextField
-        onChange={debounce(onInputChangeFilter, 500)}
+        onChange={onInputChangeFilter}
         fullWidth
         defaultValue={filter}
         id="filter-articles"

@@ -13,7 +13,7 @@ export const articlesApi = createApi({
   endpoints: builder => ({
     getArticles: builder.query<Articles, IQuery>({
       query: ({ filter, page }) =>
-        `/v3/articles?${createQueryString(filter)}&_limit=12&_start=${page}`,
+        `/v3/articles?${createQueryString(filter)}_limit=12&_start=${page}`,
       providesTags: ['Article'],
       transformResponse: (response: Articles, _meta, args) => {
         if (args.filter === '') return response;

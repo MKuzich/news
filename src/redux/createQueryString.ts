@@ -1,6 +1,8 @@
-export const createQueryString = (filter: string): string => {
-  if (filter === '') return '';
-  return filter
+export const createQueryString = (queryFilter: string): string => {
+  if (queryFilter === '') {
+    return '';
+  }
+  return queryFilter
     .split(' ')
     .map(
       (itm, idx) =>
